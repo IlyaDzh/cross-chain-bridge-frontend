@@ -1,48 +1,89 @@
 import { createMuiTheme } from "@material-ui/core";
 
 export default createMuiTheme({
+    overrides: {
+        MuiButton: {
+            disableElevation: true,
+            outlinedPrimary: {
+                border: "1px solid #FF5C01"
+            },
+            contained: {
+                boxShadow: "none",
+                "&:hover": {
+                    boxShadow: "none"
+                },
+                "&:active": {
+                    boxShadow: "none"
+                }
+            },
+            containedPrimary: {
+                color: "#fff"
+            },
+            sizeLarge: {
+                maxWidth: "220px",
+                width: "100%",
+                height: "60px",
+                fontSize: "24px"
+            },
+            sizeSmall: {
+                maxWidth: "82px",
+                width: "100%",
+                height: "32px",
+                fontSize: "15px"
+            }
+        }
+    },
     palette: {
         primary: {
-            main: "#1885ea"
+            main: "#fb6c1c"
         },
         secondary: {
-            main: "#17e3b2"
+            main: "#131315"
         },
         text: {
-            primary: "#071c2f",
-            secondary: "#484d51"
+            primary: "#fb6c1c",
+            secondary: "#7a7a81"
+        },
+        border: {
+            main: "#7a7a81",
+            light: "#e9e9e9"
         },
         background: {
-            main: "#deeff7"
-        },
-        error: {
-            main: "#f33f17"
-        },
-        success: {
-            main: "#17e3b2"
+            main: "#b5b5b5"
         }
     },
     typography: {
+        allVariants: {
+            color: "#131315"
+        },
+        button: {
+            textTransform: "none"
+        },
         h1: {
             fontSize: "40px",
-            fontWeight: 700
+            lineHeight: "52px",
+            "@media (max-width: 960px)": {
+                fontSize: "28px"
+            }
         },
         h2: {
             fontSize: "24px",
-            fontWeight: 400
+            lineHeight: "31px"
         },
         h3: {
             fontSize: "22px"
         },
-        subtitle1: {
-            fontWeight: "bold"
-        },
         body2: {
-            fontSize: "16px"
+            fontSize: "15px",
+            lineHeight: "18px",
+            "@media (max-width: 960px)": {
+                fontSize: "14px"
+            }
         },
         caption: {
-            color: "#484d51"
+            fontSize: "12px",
+            color: "#7a7a81"
         },
-        fontFamily: "Overpass"
+        fontFamily: "Suisse Intl Regular"
     }
 });

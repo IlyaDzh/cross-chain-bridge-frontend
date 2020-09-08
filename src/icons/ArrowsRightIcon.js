@@ -1,6 +1,6 @@
 import React from "react";
 
-export const ArrowsIcon = () => (
+export const ArrowsRightIcon = () => (
     <svg
         width="15"
         height="14"

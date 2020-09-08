@@ -1,1 +1,29 @@
 @import "~./fonts.scss";
+
+body {
+    margin: 0;
+}
+
+.container {
+    max-width: 1218px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+@media (max-width: 1218px) {
+    .container {
+        width: unset;
+        padding: 0 30px;
+    }
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 0 15px;
+    }
+}
+
+::selection {
+    background: rgba(248, 132, 65, 0.9);
+    color: #fff;
+}

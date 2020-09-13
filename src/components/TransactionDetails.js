@@ -13,41 +13,43 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const _TransactionDetails = ({ transactions, tempTransferForm }) => {
+const _TransactionDetails = ({
+    transactions,
+    tempTransferForm,
+    intervalTransactions
+}) => {
     const classes = useStyles();
 
     return (
-        transactions &&
-        (transactions.txOut.status !== "PENDING" ||
-            transactions.txIn.status !== "PENDING") && (
-            <>
-                <Typography variant="h1" align="center">
-                    Transaction Details
-                </Typography>
-                <div className={classes.transactionDetailsList}>
-                    {transactions.txOut.status === "PENDING" && (
-                        <DetailsItem
-                            title="Source Blockchain"
-                            data={transactions.txOut}
-                            linkTo={tempTransferForm.fromNode}
-                        />
-                    )}
-                    {transactions.txIn.status === "PENDING" && (
-                        <DetailsItem
-                            title="Target Blockchain"
-                            data={transactions.txIn}
-                            linkTo={tempTransferForm.toNode}
-                        />
-                    )}
-                </div>
-            </>
-        )
+        <>
+            <Typography variant="h1" align="center">
+                {intervalTransactions && "Waiting for the Transaction Details"}
+                {transactions && !intervalTransactions && "Transaction Details"}
+            </Typography>
+            <div className={classes.transactionDetailsList}>
+                {transactions && transactions.txOut.status !== "PENDING" && (
+                    <DetailsItem
+                        title="Source Blockchain"
+                        data={transactions.txOut}
+                        linkTo={tempTransferForm.fromNode}
+                    />
+                )}
+                {transactions && transactions.txIn.status !== "PENDING" && (
+                    <DetailsItem
+                        title="Target Blockchain"
+                        data={transactions.txIn}
+                        linkTo={tempTransferForm.toNode}
+                    />
+                )}
+            </div>
+        </>
     );
 };
 
 const mapMobxToProps = ({ transfer }) => ({
     transactions: transfer.transactions,
-    tempTransferForm: transfer.tempTransferForm
+    tempTransferForm: transfer.tempTransferForm,
+    intervalTransactions: transfer.intervalTransactions
 });
 
 export const TransactionDetails = inject(mapMobxToProps)(

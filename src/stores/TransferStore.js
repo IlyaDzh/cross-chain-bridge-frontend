@@ -40,13 +40,19 @@ export class TransferStore {
     @observable
     pending = false;
 
-    intervalTransactionId = undefined;
+    @observable
     intervalTransactions = undefined;
+
+    intervalTransactionId = undefined;
+
+    transactionIdIsPending = false;
+    transactionDetailsIsPending = false;
 
     @action
     doTransfer = () => {
         this.pending = true;
         this.transferFormErrors = TRANSFER_FORM_ERRORS;
+        clearInterval(this.intervalTransactionId);
 
         axiosInstance
             .post("/transfers", this.transferForm)
@@ -71,11 +77,20 @@ export class TransferStore {
     @action
     checkTransactionId = () => {
         this.intervalTransactionId = setInterval(() => {
-            axiosInstance
-                .post("/transfers", this.tempTransferForm)
-                .then(({ data }) => {
-                    this.transferData = data;
-                });
+            if (this.transferData.id) {
+                clearInterval(this.intervalTransactionId);
+            }
+            if (!this.transactionIdIsPending) {
+                this.transactionIdIsPending = true;
+                axiosInstance
+                    .post("/transfers", this.tempTransferForm)
+                    .then(({ data }) => {
+                        this.transferData = data;
+                    })
+                    .finally(() => {
+                        this.transactionIdIsPending = false;
+                    });
+            }
         }, 2500);
     };
 
@@ -83,14 +98,30 @@ export class TransferStore {
     checkTransactionStatus = () => {
         this.intervalTransactions = setInterval(() => {
             if (this.transferData.id) {
+                if (
+                    this.transactions &&
+                    this.transactions.txOut.status !== "PENDING" &&
+                    this.transactions.txIn.status !== "PENDING"
+                ) {
+                    clearInterval(this.intervalTransactions);
+                    this.intervalTransactions = undefined;
+                }
+
                 clearInterval(this.intervalTransactionId);
-                axiosInstance
-                    .get(`/transfers/${this.transferData.id}`)
-                    .then(({ data }) => {
-                        this.transactions = data;
-                    });
+
+                if (!this.transactionDetailsIsPending) {
+                    this.transactionDetailsIsPending = true;
+                    axiosInstance
+                        .get(`/transfers/${this.transferData.id}`)
+                        .then(({ data }) => {
+                            this.transactions = data;
+                        })
+                        .finally(() => {
+                            this.transactionDetailsIsPending = false;
+                        });
+                }
             }
-        }, 5000);
+        }, 3500);
     };
 
     @action

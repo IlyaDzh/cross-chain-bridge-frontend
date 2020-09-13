@@ -40,6 +40,7 @@ export class TransferStore {
     @observable
     pending = false;
 
+    intervalTransactionId = undefined;
     intervalTransactions = undefined;
 
     @action
@@ -53,10 +54,14 @@ export class TransferStore {
                 this.tempTransferForm = { ...this.transferForm };
                 this.resetTransactions();
                 this.transferData = data;
+                this.checkTransactionId();
                 this.transferDialogOpen = true;
             })
-            .catch(({ response: { data } }) => {
-                this.transferFormErrors[data.field] = data.message;
+            .catch(({ response }) => {
+                if (response.data) {
+                    this.transferFormErrors[response.data.field] =
+                        response.data.message;
+                }
             })
             .finally(() => {
                 this.pending = false;
@@ -64,13 +69,27 @@ export class TransferStore {
     };
 
     @action
+    checkTransactionId = () => {
+        this.intervalTransactionId = setInterval(() => {
+            axiosInstance
+                .post("/transfers", this.tempTransferForm)
+                .then(({ data }) => {
+                    this.transferData = data;
+                });
+        }, 2500);
+    };
+
+    @action
     checkTransactionStatus = () => {
         this.intervalTransactions = setInterval(() => {
-            axiosInstance
-                .get(`/transfers/${this.transferData.id}`)
-                .then(({ data }) => {
-                    this.transactions = data;
-                });
+            if (this.transferData.id) {
+                clearInterval(this.intervalTransactionId);
+                axiosInstance
+                    .get(`/transfers/${this.transferData.id}`)
+                    .then(({ data }) => {
+                        this.transactions = data;
+                    });
+            }
         }, 5000);
     };
 

@@ -17,22 +17,28 @@ const _TransactionDetails = ({ transactions, tempTransferForm }) => {
     const classes = useStyles();
 
     return (
-        transactions && (
+        transactions &&
+        (transactions.txOut.status !== "PENDING" ||
+            transactions.txIn.status !== "PENDING") && (
             <>
                 <Typography variant="h1" align="center">
                     Transaction Details
                 </Typography>
                 <div className={classes.transactionDetailsList}>
-                    <DetailsItem
-                        title="Source Blockchain"
-                        data={transactions.txOut}
-                        linkTo={tempTransferForm.fromNode}
-                    />
-                    <DetailsItem
-                        title="Target Blockchain"
-                        data={transactions.txIn}
-                        linkTo={tempTransferForm.toNode}
-                    />
+                    {transactions.txOut.status === "PENDING" && (
+                        <DetailsItem
+                            title="Source Blockchain"
+                            data={transactions.txOut}
+                            linkTo={tempTransferForm.fromNode}
+                        />
+                    )}
+                    {transactions.txIn.status === "PENDING" && (
+                        <DetailsItem
+                            title="Target Blockchain"
+                            data={transactions.txIn}
+                            linkTo={tempTransferForm.toNode}
+                        />
+                    )}
                 </div>
             </>
         )

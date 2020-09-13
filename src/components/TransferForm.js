@@ -65,7 +65,7 @@ const _TransferForm = ({ transferForm, setFormValue, doTransfer }) => {
                     walletValue={transferForm.addressFrom}
                     onChangeInput={e => setFormValue("addressFrom", e.target.value)}
                     onChangeSelect={e => setFormValue("fromNode", e.target.value)}
-                    inputLabel="Wallet 1 Address"
+                    inputLabel="Source Wallet Address"
                     withCaption
                 />
                 <div className={classes.transferFormDivider}>
@@ -82,7 +82,7 @@ const _TransferForm = ({ transferForm, setFormValue, doTransfer }) => {
                     walletValue={transferForm.addressTo}
                     onChangeInput={e => setFormValue("addressTo", e.target.value)}
                     onChangeSelect={e => setFormValue("toNode", e.target.value)}
-                    inputLabel="Wallet 2 Address"
+                    inputLabel="Target Wallet Address"
                 />
             </div>
             <div className={classes.transferFormButton}>

@@ -73,6 +73,9 @@ export default createMuiTheme({
         h3: {
             fontSize: "22px"
         },
+        h4: {
+            fontSize: "18px"
+        },
         body2: {
             fontSize: "15px",
             lineHeight: "18px",

@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 
 import { CloseIcon } from "@/icons/CloseIcon";
-import qrcode from "@/images/qrcode.png";
+import qrcode from "@/images/qrcode.jpg";
 
 const useStyles = makeStyles(theme => ({
     dialogPaper: {
@@ -113,11 +113,11 @@ const _TransferDialog = ({ transferDialogOpen, setTransferDialogOpen }) => {
                     <div className={classes.copyWrapper}>
                         <div className={classes.disabledField}>
                             <Typography color="textSecondary" variant="body2" noWrap>
-                                0xb4bc263278d3f77a652a8d73a6bfd8ec0ba1a63923bbb4f38147fb8a943da26d
+                                0xE082e567E35D8930DafEC2FBaa96fd88418718De
                             </Typography>
                         </div>
                         <CopyToClipboard
-                            text="0xb4bc263278d3f77a652a8d73a6bfd8ec0ba1a63923bbb4f38147fb8a943da26d"
+                            text="0xE082e567E35D8930DafEC2FBaa96fd88418718De"
                             onCopy={() => setCopied(true)}
                         >
                             <Button

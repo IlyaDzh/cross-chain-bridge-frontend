@@ -52,7 +52,7 @@ export const TransferWallet = ({
     withCaption
 }) => {
     const classes = useStyles();
-    const [walletType, setWalletType] = useState("");
+    const [walletType, setWalletType] = useState(withCaption ? "em" : "bsc");
 
     const handleChange = event => {
         setWalletType(event.target.value);
@@ -76,8 +76,12 @@ export const TransferWallet = ({
                     onChange={handleChange}
                     fullWidth
                 >
-                    <MenuItem value="em">Ethereum Mainnet</MenuItem>
-                    <MenuItem value="bsc">Binance Smart Chain</MenuItem>
+                    <MenuItem value="em" disabled={!withCaption}>
+                        Ethereum Mainnet
+                    </MenuItem>
+                    <MenuItem value="bsc" disabled={withCaption}>
+                        Binance Smart Chain
+                    </MenuItem>
                 </TextField>
             </div>
             <div className={classes.transferWalletAddress}>

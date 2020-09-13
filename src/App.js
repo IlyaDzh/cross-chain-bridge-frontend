@@ -2,6 +2,7 @@ import React from "react";
 
 import {
     Header,
+    Footer,
     TransferForm,
     TransactionDetails,
     TransferDialog
@@ -14,6 +15,7 @@ export const App = () => (
         <div className="container">
             <TransferForm />
             <TransactionDetails />
+            <Footer />
         </div>
 
         <TransferDialog />

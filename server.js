@@ -12,10 +12,8 @@ app.get("/*", (request, response) => {
     response.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
-console.log("Starting express app");
-
-const port = 3010;
-
-app.listen(port);
-
-console.log(`Express app is listening on port ${port}`);
+app.listen(process.env.REACT_APP_PRODUCTION_PORT, () => {
+    console.log(
+        `Express server is listening on ${process.env.REACT_APP_PRODUCTION_PORT}`
+    );
+});

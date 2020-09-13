@@ -71,7 +71,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export const DetailsItem = ({ title }) => {
+export const DetailsItem = ({ title, data, linkTo }) => {
     const classes = useStyles();
 
     return (
@@ -86,22 +86,32 @@ export const DetailsItem = ({ title }) => {
             </div>
             <div className={classes.detailsItemFooter}>
                 <div className={classes.detailsItemFooterHash}>
-                    <Link href="#" classes={{ root: classes.linkHash }} variant="h2">
-                        0xb4bc263278d3f77a652a8d73a6bfd8ec0ba1a63923bbb4f38147fb8a943da26d
+                    <Link
+                        href={
+                            linkTo === "ETH"
+                                ? `https://etherscan.io/tx/${data.txHash}`
+                                : `https://explorer.binance.org/smart/tx/${data.txHash}/`
+                        }
+                        classes={{ root: classes.linkHash }}
+                        variant="h2"
+                        target="_blank"
+                        rel="noreferrer noopener"
+                    >
+                        {data.txHash}
                     </Link>
                     <Typography
                         classes={{ root: classes.transactionSum }}
                         variant="h2"
                     >
-                        600.0 PROM
+                        {data.amount} PROM
                     </Typography>
                 </div>
                 <div className={classes.detailsItemFooterStatus}>
                     <Typography variant="body2" color="textSecondary">
-                        04-09-2020 13:30
+                        {data.createdAt}
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
-                        Successed
+                        {data.status}
                     </Typography>
                 </div>
             </div>

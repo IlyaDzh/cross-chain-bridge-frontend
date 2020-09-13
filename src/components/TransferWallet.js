@@ -48,14 +48,16 @@ const useStyles = makeStyles(theme => ({
 export const TransferWallet = ({
     walletValue,
     onChangeInput,
+    onChangeSelect,
     inputLabel,
     withCaption
 }) => {
     const classes = useStyles();
-    const [walletType, setWalletType] = useState(withCaption ? "em" : "bsc");
+    const [walletType, setWalletType] = useState(withCaption ? "ETH" : "BSC");
 
     const handleChange = event => {
         setWalletType(event.target.value);
+        onChangeSelect(event.target.value);
     };
 
     return (
@@ -76,10 +78,10 @@ export const TransferWallet = ({
                     onChange={handleChange}
                     fullWidth
                 >
-                    <MenuItem value="em" disabled={!withCaption}>
+                    <MenuItem value="ETH" disabled={!withCaption}>
                         Ethereum Mainnet
                     </MenuItem>
-                    <MenuItem value="bsc" disabled={withCaption}>
+                    <MenuItem value="BSC" disabled={withCaption}>
                         Binance Smart Chain
                     </MenuItem>
                 </TextField>

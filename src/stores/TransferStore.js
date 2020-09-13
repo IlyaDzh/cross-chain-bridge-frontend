@@ -1,10 +1,16 @@
 import { observable, action } from "mobx";
+import { axiosInstance } from "@/api/axios-instance";
 
 const TRANSFER_FORM = {
-    mainnet_type_from: "",
-    wallet_from: "",
-    mainnet_type_to: "",
-    wallet_to: ""
+    fromNode: "ETH",
+    addressFrom: "",
+    toNode: "BSC",
+    addressTo: ""
+};
+
+const TRANSFER_DATA = {
+    id: "",
+    poolAddress: ""
 };
 
 export class TransferStore {
@@ -12,12 +18,41 @@ export class TransferStore {
     transferForm = TRANSFER_FORM;
 
     @observable
+    tempTransferForm = TRANSFER_FORM;
+
+    @observable
+    transferData = TRANSFER_DATA;
+
+    @observable
+    transactions = null;
+
+    @observable
     transferDialogOpen = false;
+
+    intervalTransactions = undefined;
 
     @action
     doTransfer = () => {
-        console.log(this.transferForm);
-        this.transferDialogOpen = true;
+        axiosInstance
+            .post("/transfers", this.transferForm)
+            .then(({ data }) => {
+                this.tempTransferForm = { ...this.transferForm };
+                this.resetTransactions();
+                this.transferData = data;
+                this.transferDialogOpen = true;
+            })
+            .catch(() => {});
+    };
+
+    @action
+    checkTransactionStatus = () => {
+        this.intervalTransactions = setInterval(() => {
+            axiosInstance
+                .get(`/transfers/${this.transferData.id}`)
+                .then(({ data }) => {
+                    this.transactions = data;
+                });
+        }, 5000);
     };
 
     @action
@@ -28,10 +63,15 @@ export class TransferStore {
     @action
     setTransferDialogOpen = transferDialogOpen => {
         this.transferDialogOpen = transferDialogOpen;
+        if (!transferDialogOpen) {
+            this.checkTransactionStatus();
+        }
     };
 
     @action
-    resetTransferForm = () => {
+    resetTransactions = () => {
         this.transferForm = TRANSFER_FORM;
+        clearInterval(this.intervalTransactions);
+        this.transactions = null;
     };
 }

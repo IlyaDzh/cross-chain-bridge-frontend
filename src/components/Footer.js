@@ -14,22 +14,26 @@ export const Footer = () => {
     return (
         <footer className={classes.footer}>
             <Typography variant="h4" className={classes.footerDesc}>
-                In case of any problems, write to the{" "}
+                Our support will be glad to help you if any problems occurred. Make
+                sure to supply us with as much detail about the problem as possible.
+                Please contact us via{" "}
+                <Link href="mailto:info@prometeus.io">email</Link> ,{" "}
                 <Link
-                    href="https://telegram.me/ilyadz"
+                    href="http://prometeus.io/contacts"
+                    target="_blank"
+                    rel="noreferrer noopener"
+                >
+                    website contact form
+                </Link>{" "}
+                or{" "}
+                <Link
+                    href="https://telegram.me/promnetwork"
                     target="_blank"
                     rel="noreferrer noopener"
                 >
                     telegram
-                </Link>{" "}
-                or to the{" "}
-                <Link
-                    href="http://prometeus.io/"
-                    target="_blank"
-                    rel="noreferrer noopener"
-                >
-                    prometeus.io
                 </Link>
+                .
             </Typography>
         </footer>
     );

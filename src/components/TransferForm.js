@@ -62,8 +62,9 @@ const _TransferForm = ({ transferForm, setFormValue, doTransfer }) => {
         <div className={classes.transferForm}>
             <div className={classes.transferFormWallets}>
                 <TransferWallet
-                    walletValue={transferForm.wallet_from}
-                    onChangeInput={e => setFormValue("wallet_from", e.target.value)}
+                    walletValue={transferForm.addressFrom}
+                    onChangeInput={e => setFormValue("addressFrom", e.target.value)}
+                    onChangeSelect={e => setFormValue("fromNode", e.target.value)}
                     inputLabel="Wallet 1 Address"
                     withCaption
                 />
@@ -78,8 +79,9 @@ const _TransferForm = ({ transferForm, setFormValue, doTransfer }) => {
                     </div>
                 </div>
                 <TransferWallet
-                    walletValue={transferForm.wallet_to}
-                    onChangeInput={e => setFormValue("wallet_to", e.target.value)}
+                    walletValue={transferForm.addressTo}
+                    onChangeInput={e => setFormValue("addressTo", e.target.value)}
+                    onChangeSelect={e => setFormValue("toNode", e.target.value)}
                     inputLabel="Wallet 2 Address"
                 />
             </div>
@@ -89,6 +91,7 @@ const _TransferForm = ({ transferForm, setFormValue, doTransfer }) => {
                     variant="contained"
                     size="large"
                     onClick={doTransfer}
+                    disabled={!transferForm.addressFrom || !transferForm.addressTo}
                 >
                     Transfer
                 </Button>

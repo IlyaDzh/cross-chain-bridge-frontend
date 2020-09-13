@@ -13,7 +13,6 @@ import {
 } from "@material-ui/core";
 
 import { CloseIcon } from "@/icons/CloseIcon";
-import qrcode from "@/images/qrcode.jpg";
 
 const useStyles = makeStyles(theme => ({
     dialogPaper: {
@@ -70,7 +69,11 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const _TransferDialog = ({ transferDialogOpen, setTransferDialogOpen }) => {
+const _TransferDialog = ({
+    transferData,
+    transferDialogOpen,
+    setTransferDialogOpen
+}) => {
     const classes = useStyles();
     const [copied, setCopied] = useState(false);
 
@@ -113,11 +116,11 @@ const _TransferDialog = ({ transferDialogOpen, setTransferDialogOpen }) => {
                     <div className={classes.copyWrapper}>
                         <div className={classes.disabledField}>
                             <Typography color="textSecondary" variant="body2" noWrap>
-                                0xE082e567E35D8930DafEC2FBaa96fd88418718De
+                                {transferData.poolAddress}
                             </Typography>
                         </div>
                         <CopyToClipboard
-                            text="0xE082e567E35D8930DafEC2FBaa96fd88418718De"
+                            text={transferData.poolAddress}
                             onCopy={() => setCopied(true)}
                         >
                             <Button
@@ -133,7 +136,10 @@ const _TransferDialog = ({ transferDialogOpen, setTransferDialogOpen }) => {
                         </CopyToClipboard>
                     </div>
                     <div className={classes.qrcodeWrapper}>
-                        <img src={qrcode} alt="QR code" />
+                        <img
+                            src={`https://chart.apis.google.com/chart?choe=UTF-8&chld=H&cht=qr&chs=200x200&chl=${transferData.poolAddress}`}
+                            alt="QR code"
+                        />
                     </div>
                 </DialogContent>
                 <DialogActions className={classes.dialogActionsButton}>
@@ -152,6 +158,7 @@ const _TransferDialog = ({ transferDialogOpen, setTransferDialogOpen }) => {
 };
 
 const mapMobxToProps = ({ transfer }) => ({
+    transferData: transfer.transferData,
     transferDialogOpen: transfer.transferDialogOpen,
     setTransferDialogOpen: transfer.setTransferDialogOpen
 });

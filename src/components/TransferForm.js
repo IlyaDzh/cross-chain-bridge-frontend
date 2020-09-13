@@ -1,6 +1,6 @@
 import React from "react";
 import { inject, observer } from "mobx-react";
-import { Button, Hidden, makeStyles } from "@material-ui/core";
+import { Button, Hidden, CircularProgress, makeStyles } from "@material-ui/core";
 
 import { TransferWallet } from "./TransferWallet";
 import { ArrowsRightIcon } from "@/icons/ArrowsRightIcon";
@@ -52,10 +52,19 @@ const useStyles = makeStyles(theme => ({
     },
     transferFormButton: {
         textAlign: "center"
+    },
+    loader: {
+        marginLeft: "5px"
     }
 }));
 
-const _TransferForm = ({ transferForm, setFormValue, doTransfer }) => {
+const _TransferForm = ({
+    transferForm,
+    transferFormErrors,
+    setFormValue,
+    doTransfer,
+    pending
+}) => {
     const classes = useStyles();
 
     return (
@@ -63,6 +72,7 @@ const _TransferForm = ({ transferForm, setFormValue, doTransfer }) => {
             <div className={classes.transferFormWallets}>
                 <TransferWallet
                     walletValue={transferForm.addressFrom}
+                    walletError={transferFormErrors.addressFrom}
                     onChangeInput={e => setFormValue("addressFrom", e.target.value)}
                     onChangeSelect={e => setFormValue("fromNode", e.target.value)}
                     inputLabel="Source Wallet Address"
@@ -80,6 +90,7 @@ const _TransferForm = ({ transferForm, setFormValue, doTransfer }) => {
                 </div>
                 <TransferWallet
                     walletValue={transferForm.addressTo}
+                    walletError={transferFormErrors.addressTo}
                     onChangeInput={e => setFormValue("addressTo", e.target.value)}
                     onChangeSelect={e => setFormValue("toNode", e.target.value)}
                     inputLabel="Target Wallet Address"
@@ -91,9 +102,20 @@ const _TransferForm = ({ transferForm, setFormValue, doTransfer }) => {
                     variant="contained"
                     size="large"
                     onClick={doTransfer}
-                    disabled={!transferForm.addressFrom || !transferForm.addressTo}
+                    disabled={
+                        pending ||
+                        !transferForm.addressFrom ||
+                        !transferForm.addressTo
+                    }
                 >
                     Transfer
+                    {pending && (
+                        <CircularProgress
+                            classes={{ root: classes.loader }}
+                            size={25}
+                            thickness={5}
+                        />
+                    )}
                 </Button>
             </div>
         </div>
@@ -102,8 +124,10 @@ const _TransferForm = ({ transferForm, setFormValue, doTransfer }) => {
 
 const mapMobxToProps = ({ transfer }) => ({
     transferForm: transfer.transferForm,
+    transferFormErrors: transfer.transferFormErrors,
     setFormValue: transfer.setFormValue,
-    doTransfer: transfer.doTransfer
+    doTransfer: transfer.doTransfer,
+    pending: transfer.pending
 });
 
 export const TransferForm = inject(mapMobxToProps)(observer(_TransferForm));

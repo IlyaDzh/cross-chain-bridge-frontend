@@ -47,6 +47,7 @@ const useStyles = makeStyles(theme => ({
 
 export const TransferWallet = ({
     walletValue,
+    walletError,
     onChangeInput,
     onChangeSelect,
     inputLabel,
@@ -92,6 +93,8 @@ export const TransferWallet = ({
                     variant="outlined"
                     value={walletValue}
                     onChange={onChangeInput}
+                    error={Boolean(walletError)}
+                    helperText={walletError}
                     fullWidth
                 />
             </div>

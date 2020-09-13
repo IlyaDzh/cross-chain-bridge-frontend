@@ -8,6 +8,11 @@ const TRANSFER_FORM = {
     addressTo: ""
 };
 
+const TRANSFER_FORM_ERRORS = {
+    addressFrom: "",
+    addressTo: ""
+};
+
 const TRANSFER_DATA = {
     id: "",
     poolAddress: ""
@@ -16,6 +21,9 @@ const TRANSFER_DATA = {
 export class TransferStore {
     @observable
     transferForm = TRANSFER_FORM;
+
+    @observable
+    transferFormErrors = TRANSFER_FORM_ERRORS;
 
     @observable
     tempTransferForm = TRANSFER_FORM;
@@ -29,10 +37,16 @@ export class TransferStore {
     @observable
     transferDialogOpen = false;
 
+    @observable
+    pending = false;
+
     intervalTransactions = undefined;
 
     @action
     doTransfer = () => {
+        this.pending = true;
+        this.transferFormErrors = TRANSFER_FORM_ERRORS;
+
         axiosInstance
             .post("/transfers", this.transferForm)
             .then(({ data }) => {
@@ -41,7 +55,12 @@ export class TransferStore {
                 this.transferData = data;
                 this.transferDialogOpen = true;
             })
-            .catch(() => {});
+            .catch(({ response: { data } }) => {
+                this.transferFormErrors[data.field] = data.message;
+            })
+            .finally(() => {
+                this.pending = false;
+            });
     };
 
     @action
@@ -70,6 +89,7 @@ export class TransferStore {
 
     @action
     resetTransactions = () => {
+        this.transferFormErrors = TRANSFER_FORM_ERRORS;
         this.transferForm = TRANSFER_FORM;
         clearInterval(this.intervalTransactions);
         this.transactions = null;

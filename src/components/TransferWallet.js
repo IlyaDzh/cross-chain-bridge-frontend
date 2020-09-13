@@ -95,7 +95,7 @@ export const TransferWallet = ({
                     fullWidth
                 />
             </div>
-            {withCaption && (
+            {/* {withCaption && (
                 <>
                     <Typography variant="caption" display="block">
                         Commission fee is 11.11 PROM
@@ -105,7 +105,7 @@ export const TransferWallet = ({
                         commission fee!
                     </Typography>
                 </>
-            )}
+            )} */}
         </div>
     );
 };

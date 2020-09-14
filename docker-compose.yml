@@ -1,0 +1,12 @@
+version: "3"
+services:
+  cross-chain-bridge-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - ${REACT_APP_PRODUCTION_PORT}:${REACT_APP_PRODUCTION_PORT}
+    tty: true

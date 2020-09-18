@@ -43,16 +43,12 @@ export class TransferStore {
     @observable
     intervalTransactions = undefined;
 
-    intervalTransactionId = undefined;
-
-    transactionIdIsPending = false;
     transactionDetailsIsPending = false;
 
     @action
     doTransfer = () => {
         this.pending = true;
         this.transferFormErrors = TRANSFER_FORM_ERRORS;
-        clearInterval(this.intervalTransactionId);
 
         axiosInstance
             .post("/transfers", this.transferForm)
@@ -60,11 +56,15 @@ export class TransferStore {
                 this.tempTransferForm = { ...this.transferForm };
                 this.resetTransactions();
                 this.transferData = data;
-                this.checkTransactionId();
                 this.transferDialogOpen = true;
             })
             .catch(({ response }) => {
-                if (response.data) {
+                if (
+                    response &&
+                    response.data &&
+                    response.data.field &&
+                    response.data.message
+                ) {
                     this.transferFormErrors[response.data.field] =
                         response.data.message;
                 }
@@ -72,26 +72,6 @@ export class TransferStore {
             .finally(() => {
                 this.pending = false;
             });
-    };
-
-    @action
-    checkTransactionId = () => {
-        this.intervalTransactionId = setInterval(() => {
-            if (this.transferData.id) {
-                clearInterval(this.intervalTransactionId);
-            }
-            if (!this.transactionIdIsPending) {
-                this.transactionIdIsPending = true;
-                axiosInstance
-                    .post("/transfers", this.tempTransferForm)
-                    .then(({ data }) => {
-                        this.transferData = data;
-                    })
-                    .finally(() => {
-                        this.transactionIdIsPending = false;
-                    });
-            }
-        }, 2500);
     };
 
     @action
@@ -106,8 +86,6 @@ export class TransferStore {
                     clearInterval(this.intervalTransactions);
                     this.intervalTransactions = undefined;
                 }
-
-                clearInterval(this.intervalTransactionId);
 
                 if (!this.transactionDetailsIsPending) {
                     this.transactionDetailsIsPending = true;

@@ -90,7 +90,7 @@ export const DetailsItem = ({ title, data, linkTo }) => {
                         href={
                             linkTo === "ETH"
                                 ? `https://etherscan.io/tx/${data.txHash}`
-                                : `https://explorer.binance.org/smart/tx/${data.txHash}/`
+                                : `https://explorer.binance.org/smart/tx/${data.txHash}/token_transfers`
                         }
                         classes={{ root: classes.linkHash }}
                         variant="h2"

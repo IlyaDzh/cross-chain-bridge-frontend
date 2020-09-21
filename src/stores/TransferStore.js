@@ -66,7 +66,7 @@ export class TransferStore {
                     response.data.message
                 ) {
                     this.transferFormErrors[response.data.field] =
-                        response.data.message;
+                        "Sorry, it is not a valid wallet address.";
                 }
             })
             .finally(() => {

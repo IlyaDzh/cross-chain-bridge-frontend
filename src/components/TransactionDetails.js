@@ -31,14 +31,14 @@ const _TransactionDetails = ({
                     <DetailsItem
                         title="Source Blockchain"
                         data={transactions.txOut}
-                        linkTo={tempTransferForm.fromNode}
+                        linkTo={tempTransferForm.toNode}
                     />
                 )}
                 {transactions && transactions.txIn.status !== "PENDING" && (
                     <DetailsItem
                         title="Target Blockchain"
                         data={transactions.txIn}
-                        linkTo={tempTransferForm.toNode}
+                        linkTo={tempTransferForm.fromNode}
                     />
                 )}
             </div>

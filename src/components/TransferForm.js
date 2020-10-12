@@ -61,7 +61,9 @@ const useStyles = makeStyles(theme => ({
 const _TransferForm = ({
     transferForm,
     transferFormErrors,
+    lastChangedWalletType,
     setFormValue,
+    setLastChangedWalletType,
     doTransfer,
     pending
 }) => {
@@ -71,10 +73,16 @@ const _TransferForm = ({
         <div className={classes.transferForm}>
             <div className={classes.transferFormWallets}>
                 <TransferWallet
-                    walletValue={transferForm.addressFrom}
+                    walletValue={transferForm.address}
                     walletError={transferFormErrors.addressFrom}
-                    onChangeInput={e => setFormValue("addressFrom", e.target.value)}
+                    onChangeInput={e => {
+                        setFormValue("address", e.target.value, true);
+                        setLastChangedWalletType("source");
+                    }}
                     onChangeSelect={e => setFormValue("fromNode", e.target.value)}
+                    disabled={Boolean(
+                        transferForm.address && lastChangedWalletType === "target"
+                    )}
                     inputLabel="Source Wallet Address"
                     withCaption
                 />
@@ -89,10 +97,16 @@ const _TransferForm = ({
                     </div>
                 </div>
                 <TransferWallet
-                    walletValue={transferForm.addressTo}
+                    walletValue={transferForm.address}
                     walletError={transferFormErrors.addressTo}
-                    onChangeInput={e => setFormValue("addressTo", e.target.value)}
+                    onChangeInput={e => {
+                        setFormValue("address", e.target.value, true);
+                        setLastChangedWalletType("target");
+                    }}
                     onChangeSelect={e => setFormValue("toNode", e.target.value)}
+                    disabled={Boolean(
+                        transferForm.address && lastChangedWalletType === "source"
+                    )}
                     inputLabel="Target Wallet Address"
                 />
             </div>
@@ -102,11 +116,7 @@ const _TransferForm = ({
                     variant="contained"
                     size="large"
                     onClick={doTransfer}
-                    disabled={
-                        pending ||
-                        !transferForm.addressFrom ||
-                        !transferForm.addressTo
-                    }
+                    disabled={pending || !transferForm.address}
                 >
                     Transfer
                     {pending && (
@@ -125,7 +135,9 @@ const _TransferForm = ({
 const mapMobxToProps = ({ transfer }) => ({
     transferForm: transfer.transferForm,
     transferFormErrors: transfer.transferFormErrors,
+    lastChangedWalletType: transfer.lastChangedWalletType,
     setFormValue: transfer.setFormValue,
+    setLastChangedWalletType: transfer.setLastChangedWalletType,
     doTransfer: transfer.doTransfer,
     pending: transfer.pending
 });

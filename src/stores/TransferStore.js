@@ -2,10 +2,9 @@ import { observable, action } from "mobx";
 import { axiosInstance } from "@/api/axios-instance";
 
 const TRANSFER_FORM = {
+    address: "",
     fromNode: "ETH",
-    addressFrom: "",
-    toNode: "BSC",
-    addressTo: ""
+    toNode: "BSC"
 };
 
 const TRANSFER_FORM_ERRORS = {
@@ -24,6 +23,9 @@ export class TransferStore {
 
     @observable
     transferFormErrors = TRANSFER_FORM_ERRORS;
+
+    @observable
+    lastChangedWalletType = "";
 
     @observable
     tempTransferForm = TRANSFER_FORM;
@@ -51,7 +53,12 @@ export class TransferStore {
         this.transferFormErrors = TRANSFER_FORM_ERRORS;
 
         axiosInstance
-            .post("/transfers", this.transferForm)
+            .post("/transfers", {
+                fromNode: this.transferForm.fromNode,
+                addressFrom: this.transferForm.address.trim(),
+                toNode: this.transferForm.toNode,
+                addressTo: this.transferForm.address.trim()
+            })
             .then(({ data }) => {
                 this.tempTransferForm = { ...this.transferForm };
                 this.resetTransactions();
@@ -100,6 +107,11 @@ export class TransferStore {
                 }
             }
         }, 3500);
+    };
+
+    @action
+    setLastChangedWalletType = lastChangedWalletType => {
+        this.lastChangedWalletType = lastChangedWalletType;
     };
 
     @action

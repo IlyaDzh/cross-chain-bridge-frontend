@@ -50,6 +50,7 @@ export const TransferWallet = ({
     walletError,
     onChangeInput,
     onChangeSelect,
+    disabled,
     inputLabel,
     withCaption
 }) => {
@@ -95,6 +96,7 @@ export const TransferWallet = ({
                     onChange={onChangeInput}
                     error={Boolean(walletError)}
                     helperText={walletError}
+                    disabled={disabled}
                     fullWidth
                 />
             </div>
